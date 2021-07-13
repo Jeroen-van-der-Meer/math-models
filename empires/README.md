@@ -8,3 +8,4 @@ To-do list to self:
 - Speed up program by only sampling on a partition of the habitable squares
 - Possible memory problems with FuncAnimations if we're working with lots of iterations
 - Get rid of visual artefacts for large fields --- they don't seem to be fixed by enlarging figsize
+- WebM support for smaller output files?
