@@ -1,8 +1,6 @@
 import numpy as np
 import math
 from itertools import product
-import matplotlib.pyplot as plt
-import matplotlib.colors
 
 def random_gradient():
 	"""Create a random 2-dimensional unit gradient vector."""
