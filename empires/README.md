@@ -2,15 +2,16 @@ This program is still in a rather rough state. To get an impression of the inten
 
 To-do list to self:
 - Write a readme
+- Add other messages.
+- Give the program a more user-friendly interface. This will probably never happen.
+- Fix memory problems caused by the way the frames are stored.
 - ~~Introduce random names~~
 - ~~Implement the real_mode = False simulation~~
-- Give the program a more user-friendly interface
 - ~~Messages require polishing (e.g. a nice font and fontsize depending on figsize)~~
-- Add other messages.
-- Bug: updatefig(0) is evaluated twice.
+- ~~Bug: updatefig(0) is evaluated twice.~~
 - ~~Speed up program by only sampling on a partition of the habitable squares~~
-- Possible memory problems with FuncAnimations if we're working with lots of iterations
-- Get rid of visual artefacts for large fields --- they don't seem to be fixed by enlarging figsize
-- Speed up video encoding.
-- Prevent dark colours in random colour generation.
-- WebM support for smaller output files?
+- ~~Get rid of visual artefacts for large fields --- they don't seem to be fixed by enlarging figsize~~
+- ~~Speed up video encoding.~~
+- ~~Prevent dark colours in random colour generation.~~
+- ~~WebM support for smaller output files?~~
+- ~~Make file executable.~~

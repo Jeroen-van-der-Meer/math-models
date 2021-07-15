@@ -4,25 +4,31 @@ import numpy as np
 from itertools import product
 import csv
 
-slow_factor = 2
+slow_factor = 2 #Global term slowing down the simulation; used in simulation.py as well
 
 with open('language.txt', 'r', encoding = 'CP437') as f:
-	names = [row[0] for row in csv.reader(f, delimiter = '\n')]
+	names = [row[0] for row in csv.reader(f, delimiter = '\n')] #We will be sampling from these names whenever an empire gets created
 
 class Empire():
+	"""Captures all attributes of a specific empire."""
+
 	def __init__(self, strength = 2, count = 0, empty = False):
 		"""Initialise attributes."""
 		self.count = count
 		self.empty = empty
 		
 		if not empty:
-			rands = random.choices(range(255), k = 3)
+			#Attach a colour to the mpire; to ensure brightness, the colour hex value isn't picked arbitrarily
+			rgb = [0, 0, 0] #initial rgb
+			main, secondary = random.sample([0, 1, 2], 2)
+			rgb[main] = 255
+			secondary_value = random.choice(range(255))
+			rgb[secondary] = secondary_value
+			self.colour = "#%02X%02X%02X" %(rgb[0], rgb[1], rgb[2])
 
-			self.colour = "#%02X%02X%02X" %(rands[0], rands[1], rands[2])
-
-			self.strength = 2.5 + 0.25 * strength
+			self.strength = 2.5 + 0.25 * strength #Strength is used when determining with what probability blocks take on a certain value
 			self.decrease = 0.01 * (4 - strength) / slow_factor
-		else:
+		else: #We treat an empty field as an empire as well, though it behaves differently
 			self.colour = "black"
 			self.strength = 1
 		
@@ -30,11 +36,11 @@ class Empire():
 		name1 = random.choice(names)
 		name2 = random.choice(names)
 		self.name = (name1 + name2).capitalize()
+		self.age = 0
 	
 	def nerf(self):
 		if not self.empty and self.strength > 1:
-			factor = random.choice([-1, -1, 1])
-			#Might want to add a randomness factor to this, with some bias.
+			factor = random.choice([-1, -1, 1]) #There's some randomness involved in the nerf function, just to make the development a bit more interesting
 			self.strength += factor * self.decrease
 
 class Field():
@@ -50,6 +56,7 @@ class Field():
 		self.strength = strength
 		self.real_mode = real_mode
 		self.time = 0
+		self.milestone = 100 * 2**self.size_param * slow_factor #If an empire reaches this age, it qualifies as impressive
 
 		#Initiate map if set to real mode
 		if self.real_mode:
@@ -86,7 +93,6 @@ class Field():
 	
 	def spawn(self, x):
 		"""Introduce new empire around coordinate x."""
-		#self.species_count += 1
 		n = len(self.empires)
 		new_empire = Empire(strength = self.strength) #Fill in stuff.
 		self.empires.append(new_empire)
@@ -94,13 +100,13 @@ class Field():
 		for y in self.neighbourhood(x):
 			self.inhabitants[y] = n
 			new_empire.count += 1
-		self.messages.append([n, new_empire.name + " has been established."])
+		self.messages.append([n, 1]) #[n, 1] means message of type 1 concerning empire n
 
 	def survival_rate(self, n, x):
 		if n == 0:
 			return 1
 		elif not self.real_mode:
-			return self.empires[n].strength
+			return self.empires[n].strength #Case distinction is somewhat irrelevant but it slightly speeds up the real_mode=False simulation
 		else:
 			return self.empires[n].strength * self.habitability[x]
 
@@ -111,7 +117,7 @@ class Field():
 		self.time += 1
 
 		#Procedure will be slightly different depending on whether we're using a map or not.
-		for x in self.partition[self.time % slow_factor]:
+		for x in self.partition[self.time % slow_factor]: #Only probe part of the field
 			surroundings = [self.inhabitants[n] for n in self.neighbourhood(x)]
 			if len(set(surroundings)) == 1: #Optimisation procedure --- ignores blocks whose neighbourhood is uniform.
 				continue
@@ -119,8 +125,8 @@ class Field():
 				prob = [self.survival_rate(n, x) for n in surroundings]
 				self.update[x] = random.choices(surroundings, weights = prob, k = 1)[0] #Appears to be significantly faster than numpy's weighted random choice
 
-		#New species?
-		p = random.choice(range(self.spawn_rate))
+		#New empire?
+		p = random.choice(range(self.spawn_rate)) #Only with some minor probability will we introduce a new empire
 		if p == 0:
 			x = random.choice(self.spawnable_blocks)
 			self.spawn(x)
@@ -131,11 +137,17 @@ class Field():
 			self.inhabitants[x] = self.update[x]
 			self.empires[self.inhabitants[x]].count += 1
 
-		#To do! Implement deaths.
+		#Register deaths.
 		for n in self.living[:]:
 			if self.empires[n].count == 0:
 				self.living.remove(n)
-				self.messages.append([n, self.empires[n].name + " has perished."])
+				self.messages.append([n, 0]) #[n, 0] means message of type 0 concerning empire n
+
+		#Update age.
+		for n in self.living:
+			self.empires[n].age += 1
+			if self.empires[n].age == self.milestone:
+				self.messages.append([n, 2])
 
 		#Implement nerf.
 		for n in self.living:
