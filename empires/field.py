@@ -56,7 +56,7 @@ class Field():
 		self.strength = strength
 		self.real_mode = real_mode
 		self.time = 0
-		self.milestone = 100 * 2**self.size_param * slow_factor #If an empire reaches this age, it qualifies as impressive
+		self.milestone = 125 * 2**self.size_param * slow_factor #If an empire reaches this age, it qualifies as impressive
 
 		#Initiate map if set to real mode
 		if self.real_mode:
