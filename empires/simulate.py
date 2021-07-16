@@ -19,7 +19,8 @@ def simulate(input_field, iterations, output):
 	Then we take this information and we create an animation using Matplotlib.
 	"""
 	#Initialise the datasets.
-	data = [] #This will contain the playing field info at every timeframe
+	data = np.copy(input_field.inhabitants) #Field on first frame
+	data_updates = [] #This will contain the playing field info at every timeframe
 	population_count = [] #Keeps track of the population sizes of every empire
 	messages = [] #Holds the messages that need to be displayed
 
@@ -27,7 +28,7 @@ def simulate(input_field, iterations, output):
 	print("Starting simulation...")
 	for i in tqdm(range(iterations), bar_format='{l_bar}{bar:10}{r_bar}{bar:-10b}'): #tqdm() generates a progress bar
 		input_field.iterate()
-		data.append(np.copy(input_field.inhabitants))
+		data_updates.append(input_field.update.copy()) #We keep track of the updates of the field.
 		census = [empire.count for empire in input_field.empires] #Notice that this list becomes longer as we go on
 		population_count.append(census)
 		messages.append(input_field.messages)
@@ -89,7 +90,7 @@ def simulate(input_field, iterations, output):
 	print("Drawing initial frame...")
 	if input_field.real_mode:
 		im1 = ax1.imshow(input_field.heights, cmap = 'terrain')
-	im1 = ax1.imshow(data[0], cmap = cmap, norm = norm, alpha = 0.85)
+	im1 = ax1.imshow(data, cmap = cmap, norm = norm, alpha = 0.85)
 
 	im2s = {}
 	for n in range(1, empire_count):
@@ -109,7 +110,10 @@ def simulate(input_field, iterations, output):
 	def updatefig(frame):
 		"""This function specifies how the animation should progress."""
 		save_progress_bar.update(1)
-		im1.set_array(data[frame])
+
+		for x in data_updates[frame]:
+			data[x] = data_updates[frame][x]
+		im1.set_array(data)
 		update = (im1,)
 
 		for n in range(1, empire_count):
