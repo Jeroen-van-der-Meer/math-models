@@ -4,7 +4,7 @@ To-do list to self:
 - Write a readme
 - Add other messages.
 - Give the program a more user-friendly interface. This will probably never happen.
-- Fix memory problems caused by the way the frames are stored.
+- ~~Fix memory problems caused by the way the frames are stored.~~
 - ~~Introduce random names~~
 - ~~Implement the real_mode = False simulation~~
 - ~~Messages require polishing (e.g. a nice font and fontsize depending on figsize)~~
