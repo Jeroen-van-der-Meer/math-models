@@ -2,8 +2,9 @@ This program is still in a rather rough state. To get an impression of the inten
 
 To-do list to self:
 - Write a readme
-- Add other messages.
 - Give the program a more user-friendly interface. This will probably never happen.
+- Possible simulation speedup by defining the rand() functions that we now need to look up?
+- ~~Add other messages.~~
 - ~~Fix memory problems caused by the way the frames are stored.~~
 - ~~Introduce random names~~
 - ~~Implement the real_mode = False simulation~~
