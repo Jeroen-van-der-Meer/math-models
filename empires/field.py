@@ -56,7 +56,7 @@ class Field():
 		self.strength = strength
 		self.real_mode = real_mode
 		self.time = 0
-		self.milestone = 100 * 2**self.size_param * slow_factor #If an empire reaches this age, it qualifies as impressive
+		self.milestone = 125 * 2**self.size_param * slow_factor #If an empire reaches this age, it qualifies as impressive
 
 		#Initiate map if set to real mode
 		if self.real_mode:
@@ -148,6 +148,11 @@ class Field():
 			self.empires[n].age += 1
 			if self.empires[n].age == self.milestone:
 				self.messages.append([n, 2])
+
+		size_milestone  = (self.size**2 - self.empires[0].count) / 3
+		for n in self.living:
+			if self.empires[n].count > size_milestone:
+				self.messages.append([n, 3])
 
 		#Implement nerf.
 		for n in self.living:

@@ -42,25 +42,25 @@ def simulate(input_field, iterations, output):
 		census = census + [0] * (empire_count - length)
 		processed_count.append(census)
 	#Post-processing messages.
+	processed_messages = [[] for _ in range(iterations)]
 	for i in range(iterations):
 		for message in messages[i]:
 			if message[1] == 0:
 				p = random.choice(range(2))
 				if p == 0:
-					message[1] = input_field.empires[message[0]].name + ' has perished!'
+					processed_messages[i].append([message[0], input_field.empires[message[0]].name + ' has perished!'])
 				else:
-					message[1] = input_field.empires[message[0]].name + ' has collapsed!'
+					processed_messages[i].append([message[0], input_field.empires[message[0]].name + ' has collapsed!'])
 			elif message[1] == 1:
 				p = random.choice(range(2))
 				if p == 0:
-					message[1] = input_field.empires[message[0]].name + ' was established!'
+					processed_messages[i].append([message[0], input_field.empires[message[0]].name + ' was established!'])
 				else:
-					message[1] = input_field.empires[message[0]].name + ' was founded!'
+					processed_messages[i].append([message[0], input_field.empires[message[0]].name + ' was founded!'])
 			elif message[1] == 2:
-				message[1] = input_field.empires[message[0]].name + ' reached the age of ' + str(input_field.milestone) +'.'
-
-	#TO DO: Implement dominance message by measuring when someone takes over more than half the taken space.
-	#Exception must be made in the early frames, when this is inevitable.
+				processed_messages[i].append([message[0], input_field.empires[message[0]].name + ' reached the age of ' + str(input_field.milestone) +'.'])
+			elif message[1] == 3 and i > 50 * field.slow_factor and message not in messages[i - 1]:
+					processed_messages[i].append([message[0], input_field.empires[message[0]].name + ' is dominating the world!'])
 
 	#We now initiate figure to draw on.
 	print("Preparing animation...")
@@ -120,7 +120,7 @@ def simulate(input_field, iterations, output):
 			im2s[n].set_data(range(history), [processed_count[i + frame][n] for i in range(history)])
 			update += (im2s[n],)
 
-		for message in messages[frame]:
+		for message in processed_messages[frame]:
 			news_log.append(message)
 			del news_log[0]
 		for i in range(10):
