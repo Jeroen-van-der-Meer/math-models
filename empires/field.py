@@ -149,6 +149,11 @@ class Field():
 			if self.empires[n].age == self.milestone:
 				self.messages.append([n, 2])
 
+		size_milestone  = (self.size**2 - self.empires[0].count) / 3
+		for n in self.living:
+			if self.empires[n].count > size_milestone:
+				self.messages.append([n, 3])
+
 		#Implement nerf.
 		for n in self.living:
 			self.empires[n].nerf()
