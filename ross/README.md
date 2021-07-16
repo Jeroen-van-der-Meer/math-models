@@ -4,4 +4,4 @@ They would often come with some clever mathematical trick — almost too clever,
 
 I have collected examples from throughout the book, though with emphasis on Sections 3–8, progressing linearly, so that you will find that the examples become more advanced as the notebook progresses. As the book is written for mathematicians and not computer scientists, I have always chosen simplicity over efficiency in my code.
 
-Progress: Sections 1–5 are mostly completed.
+Progress: Sections 1–6 are mostly completed.
