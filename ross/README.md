@@ -3,5 +3,3 @@ The great variety of examples makes the book *Introduction to Probability Models
 In the hope that it may be of similar help to others, I've bundled the examples together into this notebook. I have collected examples from throughout the book, though with emphasis on Sections 3–8, progressing linearly, so that you will find that the examples become more advanced as the notebook progresses. As the book is written for mathematicians and not computer scientists, I have always chosen simplicity over efficiency in my code.
 
 **Note.** The Markdown parser embedded in GitHub isn't MathJax-aware. This means that the formulas will look much better if you open this file in (say) Jupyter or Google Colab.
-
-*Progress:* Sections 1 through 7 are now mostly completed.
