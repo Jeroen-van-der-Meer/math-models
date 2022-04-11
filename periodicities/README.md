@@ -1,0 +1,1 @@
+The goal of this document is to examine the periodic behaviour of polynomial dynamical systems on the integers mod N. As it stands it consists of a single notebook but I plan to supplement it with some additional data as well as some optimised code for OEIS submission.
