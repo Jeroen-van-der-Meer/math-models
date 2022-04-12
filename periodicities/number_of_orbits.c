@@ -61,9 +61,14 @@ next_start_value:
 }
 
 int main() {    
-	for (int n = 0; n < 2000; n++) {
-		int out = stable_orbits(n);
-		printf("%d ", out);
+	FILE *output;
+
+	output = fopen("output.csv", "w+");
+	for (int n = 1; n < 100000; n++) {
+		int term = stable_orbits(n);
+		fprintf(output, "%d,", term);
 	}
+	fprintf(output, "\n");
+	fclose(output);
 	return 0;
 }
